@@ -9,6 +9,7 @@ const cards = require('./routes/cards')
 const { login, createUser } = require('./controllers/users')
 const { auth } = require('./middlewares/auth')
 const { handleErrors } = require('./middlewares/errors')
+const { requestLogger, errorLogger } = require('./middlewares/logger')
 
 const { PORT = 3000 } = process.env
 const app = express()
@@ -17,6 +18,8 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(cookieParser())
+
+app.use(requestLogger)
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -43,6 +46,8 @@ app.use('/users', users)
 app.use('/cards', cards)
 
 app.use((req, res) => res.status(404).send({ message: 'Страница не найдена' }))
+
+app.use(errorLogger)
 
 app.use(errors())
 app.use(handleErrors)
