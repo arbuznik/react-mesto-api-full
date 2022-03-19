@@ -1,0 +1,6 @@
+.header__content {
+  display: flex;
+  flex-direction: row;
+  column-gap: 24px;
+  align-items: center;
+}

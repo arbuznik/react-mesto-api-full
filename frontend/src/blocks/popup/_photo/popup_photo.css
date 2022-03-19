@@ -1,0 +1,11 @@
+.popup_photo .popup__container {
+  grid-template-rows: 20px auto;
+  min-width: 282px;
+}
+
+@media (min-width: 1024px) {
+  .popup_photo .popup__container {
+    grid-template-rows: 32px auto;
+    grid-template-columns: 32px auto 32px;
+  }
+}

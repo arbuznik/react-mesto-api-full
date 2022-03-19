@@ -1,0 +1,15 @@
+.profile__title-wrapper {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, auto) 1fr;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .profile__title-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+    column-gap: 18px;
+  }
+}

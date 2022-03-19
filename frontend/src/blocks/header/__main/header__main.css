@@ -1,0 +1,7 @@
+.header__main {
+  padding: 0 27px;
+  min-height: 83px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

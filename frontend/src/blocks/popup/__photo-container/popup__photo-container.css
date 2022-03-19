@@ -1,0 +1,9 @@
+.popup__photo-container {
+  margin: 0;
+}
+
+@media (min-width: 1024px) {
+  .popup__photo-container {
+    grid-area: 2/2;
+  }
+}

@@ -1,0 +1,18 @@
+.profile__title {
+  grid-column-start: 2;
+  margin: 0;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 27px;
+  line-height: 33px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 1024px) {
+  .profile__title {
+    font-size: 42px;
+    line-height: 48px;
+  }
+}

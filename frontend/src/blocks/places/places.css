@@ -1,0 +1,20 @@
+.places {
+  padding: 0 19px;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 20px;
+  column-gap: 17px;
+}
+
+@media (min-width: 768px) {
+  .places {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .places {
+    grid-template-columns: repeat(3, 282px);
+    padding: 0;
+  }
+}

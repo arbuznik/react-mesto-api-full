@@ -1,0 +1,15 @@
+.header__text {
+  margin: 0;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #FFF;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .header__text {
+    display: block;
+  }
+}

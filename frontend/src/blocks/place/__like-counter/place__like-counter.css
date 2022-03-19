@@ -1,0 +1,11 @@
+.place__like-counter {
+  color: #000;
+  align-self: flex-start;
+  justify-self: center;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  margin: 0;
+  text-align: center;
+}

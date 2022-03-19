@@ -1,0 +1,5 @@
+@media (min-width: 1024px) {
+  .popup__form {
+    grid-area: 2/2;
+  }
+}

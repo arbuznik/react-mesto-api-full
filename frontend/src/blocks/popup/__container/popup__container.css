@@ -1,0 +1,15 @@
+.popup__container {
+  position: relative;
+  display: grid;
+  grid-template-rows: 20px minmax(322px, auto);
+  grid-template-columns: minmax(282px, auto);
+  row-gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .popup__container {
+    grid-template-rows: 32px minmax(330px, auto);
+    grid-template-columns: 32px 430px 32px;
+    grid-gap: 8px;
+  }
+}

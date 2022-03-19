@@ -1,0 +1,9 @@
+.popup_delete .popup__container {
+  grid-template-rows: 20px auto;
+}
+
+@media (min-width: 1024px) {
+  .popup_delete .popup__container {
+    grid-template-rows: 32px auto;
+  }
+}

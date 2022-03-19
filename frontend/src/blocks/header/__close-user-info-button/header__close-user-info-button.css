@@ -1,0 +1,13 @@
+.header__close-user-info-button {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: url(../../../images/icon-popup-close-button.svg) center no-repeat;
+  transition: opacity 0.3s;
+  display: none;
+  cursor: pointer;
+}
+
+.header__close-user-info-button:hover {
+  opacity: 0.6;
+}

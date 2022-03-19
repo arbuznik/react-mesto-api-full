@@ -1,0 +1,9 @@
+.popup_edit-avatar .popup__container {
+  grid-template-rows: 20px auto;
+}
+
+@media (min-width: 1024px) {
+  .popup_edit-avatar .popup__container {
+    grid-template-rows: 32px auto;
+  }
+}

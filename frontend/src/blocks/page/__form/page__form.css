@@ -1,0 +1,11 @@
+.page__form {
+  padding: 0px 22px;
+}
+
+@media (min-width: 425px) {
+  .page__form {
+    margin: 0 auto;
+    padding: 0;
+    width: 358px;
+  }
+}
