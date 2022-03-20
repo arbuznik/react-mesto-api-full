@@ -5,9 +5,13 @@ const { ValidationError } = require('../middlewares/errors/ValidationError')
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.send(cards.map(card => {
-      const { _id, name, link, owner, likes, createdAt } = card
-      return { _id, name, link, owner, likes, createdAt }
+    .then((cards) => res.send(cards.map((card) => {
+      const {
+        _id, name, link, owner, likes, createdAt,
+      } = card
+      return {
+        _id, name, link, owner, likes, createdAt,
+      }
     })))
     .catch(next)
 }
@@ -18,9 +22,15 @@ module.exports.createCard = (req, res, next) => {
   Card.create({
     name, link, owner: req.user._id,
   })
-    .then((card) => {
-      const { _id, name, link, owner, likes, createdAt } = card
-      res.send({ _id, name, link, owner, likes, createdAt })
+    .then((cardItem) => {
+      res.send({
+        _id: cardItem._id,
+        name: cardItem.name,
+        link: cardItem.link,
+        owner: cardItem.owner,
+        likes: cardItem.likes,
+        createdAt: cardItem.createdAt,
+      })
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -40,9 +50,13 @@ module.exports.deleteCard = (req, res, next) => {
 
       if (card.owner.toString() === req.user._id) {
         Card.findByIdAndDelete(req.params.cardId)
-          .then((card) => {
-            const { _id, name, link, owner, likes, createdAt } = card
-            res.send({ _id, name, link, owner, likes, createdAt })
+          .then((cardItem) => {
+            const {
+              _id, name, link, owner, likes, createdAt,
+            } = cardItem
+            res.send({
+              _id, name, link, owner, likes, createdAt,
+            })
           })
       } else {
         throw new AuthRequiredError('Forbidden: not an owner')
@@ -62,8 +76,12 @@ module.exports.likeCard = (req, res, next) => {
         throw new NotFoundError('Карточка не найдена')
       }
 
-      const { _id, name, link, owner, likes, createdAt } = card
-      res.send({ _id, name, link, owner, likes, createdAt })
+      const {
+        _id, name, link, owner, likes, createdAt,
+      } = card
+      res.send({
+        _id, name, link, owner, likes, createdAt,
+      })
     })
     .catch(next)
 }
@@ -79,8 +97,12 @@ module.exports.dislikeCard = (req, res, next) => {
         throw new NotFoundError('Карточка не найдена')
       }
 
-      const { _id, name, link, owner, likes, createdAt } = card
-      res.send({ _id, name, link, owner, likes, createdAt })
+      const {
+        _id, name, link, owner, likes, createdAt,
+      } = card
+      res.send({
+        _id, name, link, owner, likes, createdAt,
+      })
     })
     .catch(next)
 }

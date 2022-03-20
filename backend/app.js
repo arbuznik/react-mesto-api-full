@@ -12,6 +12,7 @@ const { login, createUser, logout } = require('./controllers/users')
 const { auth } = require('./middlewares/auth')
 const { handleErrors } = require('./middlewares/errors')
 const { requestLogger, errorLogger } = require('./middlewares/logger')
+const { NotFoundError } = require("./middlewares/errors/NotFoundError");
 
 const { PORT = 3000 } = process.env
 const app = express()
@@ -25,20 +26,20 @@ app.use(requestLogger)
 
 app.use(cors({
   origin: [
-    "http://localhost:3001",
-    "https://arbuznik.nomoredomains.work",
-    "http://arbuznik.nomoredomains.work",
+    'http://localhost:3001',
+    'https://arbuznik.nomoredomains.work',
+    'http://arbuznik.nomoredomains.work',
   ],
-  methods: ["OPTIONS", "GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-  allowedHeaders: ["Content-Type", "origin", "Authorization", "Cookie"],
+  methods: ['OPTIONS', 'GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization', 'Cookie'],
   credentials: true,
-}));
+}))
 
 app.get('/crash-test', () => {
   setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
+    throw new Error('Сервер сейчас упадёт')
+  }, 0)
+})
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -66,7 +67,9 @@ app.use(auth)
 app.use('/users', users)
 app.use('/cards', cards)
 
-app.use((req, res) => res.status(404).send({ message: 'Страница не найдена' }))
+app.use(() => {
+  throw new NotFoundError('Страница не найдена')
+})
 
 app.use(errorLogger)
 

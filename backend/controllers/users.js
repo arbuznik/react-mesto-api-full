@@ -5,13 +5,17 @@ const { NotFoundError } = require('../middlewares/errors/NotFoundError')
 const { ConflictError } = require('../middlewares/errors/ConflictError')
 const { ValidationError } = require('../middlewares/errors/ValidationError')
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send(users.map(user => {
-      const { _id, name, about, avatar, email } = user
-      return { _id, name, about, avatar, email }
+    .then((users) => res.send(users.map((user) => {
+      const {
+        _id, name, about, avatar, email,
+      } = user
+      return {
+        _id, name, about, avatar, email,
+      }
     })))
     .catch(next)
 }
@@ -23,8 +27,12 @@ module.exports.getUser = (req, res, next) => {
         throw new NotFoundError('Пользователь не найден')
       }
 
-      const { _id, name, about, avatar, email } = user
-      res.send({ _id, name, about, avatar, email })
+      const {
+        _id, name, about, avatar, email,
+      } = user
+      res.send({
+        _id, name, about, avatar, email,
+      })
     })
     .catch(next)
 }
@@ -36,8 +44,12 @@ module.exports.getCurrentUser = (req, res, next) => {
         throw new NotFoundError('Пользователь не найден')
       }
 
-      const { _id, name, about, avatar, email } = user
-      res.send({ _id, name, about, avatar, email })
+      const {
+        _id, name, about, avatar, email,
+      } = user
+      res.send({
+        _id, name, about, avatar, email,
+      })
     })
     .catch(next)
 }
@@ -52,7 +64,7 @@ module.exports.createUser = (req, res, next) => {
       name, about, avatar, email, password: hash,
     }))
     .then(() => res.status(200).send({
-        name, about, avatar, email,
+      name, about, avatar, email,
     }))
     .catch((error) => {
       if (error.code === 11000) {
@@ -73,9 +85,14 @@ module.exports.updateProfile = (req, res, next) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    .then((user) => {
-      const { _id, name, about, avatar, email } = user
-      res.send({ _id, name, about, avatar, email })
+    .then((userItem) => {
+      res.send({
+        _id: userItem._id,
+        name: userItem.name,
+        about: userItem.about,
+        avatar: userItem.avatar,
+        email: userItem.email,
+      })
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -94,9 +111,14 @@ module.exports.updateAvatar = (req, res, next) => {
     { avatar },
     { new: true, runValidators: true },
   )
-    .then((user) => {
-      const { _id, name, about, avatar, email } = user
-      res.send({ _id, name, about, avatar, email })
+    .then((userItem) => {
+      res.send({
+        _id: userItem._id,
+        name: userItem.name,
+        about: userItem.about,
+        avatar: userItem.avatar,
+        email: userItem.email,
+      })
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -120,11 +142,9 @@ module.exports.login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 3600000,
         httpOnly: true,
-      }).send({ message: 'Auth successfull'})
+      }).send({ message: 'Auth successfull' })
     })
     .catch(next)
 }
 
-module.exports.logout = (req, res) => {
-  return res.status(200).clearCookie('jwt').send({ message: 'Logout successfull'})
-}
+module.exports.logout = (req, res) => res.status(200).clearCookie('jwt').send({ message: 'Logout successfull' })
