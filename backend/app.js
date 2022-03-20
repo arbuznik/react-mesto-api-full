@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+require('dotenv').config()
 const { celebrate, Joi, errors } = require('celebrate')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -32,6 +33,12 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "origin", "Authorization", "Cookie"],
   credentials: true,
 }));
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({

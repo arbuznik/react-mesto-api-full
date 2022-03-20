@@ -5,6 +5,8 @@ const { NotFoundError } = require('../middlewares/errors/NotFoundError')
 const { ConflictError } = require('../middlewares/errors/ConflictError')
 const { ValidationError } = require('../middlewares/errors/ValidationError')
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send(users.map(user => {
@@ -112,7 +114,7 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        'key',
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' },
       )
       res.cookie('jwt', token, {
