@@ -17,17 +17,29 @@ class Auth {
     return fetch(this._url + '/signin', {
       method: 'POST',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify(userData)
     })
       .then(this._handleApiResponse)
   }
 
-  getLoggedInUser(token) {
+  getLoggedInUser() {
     return fetch(this._url + '/users/me', {
       method: 'GET',
+      credentials: 'include',
       headers: {
-        ...this._headers,
-        authorization: `Bearer ${token}`
+        ...this._headers
+      },
+    })
+      .then(this._handleApiResponse)
+  }
+
+  logout() {
+    return fetch(this._url + '/signout', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        ...this._headers
       },
     })
       .then(this._handleApiResponse)
@@ -46,10 +58,12 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseUrl: 'https://auth.nomoreparties.co',
+  baseUrl: 'https://api.arbuznik.nomoredomains.work',
   headers: {
     'Content-Type': 'application/json'
   }
 });
 
 export default auth;
+
+

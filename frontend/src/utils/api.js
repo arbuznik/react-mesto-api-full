@@ -6,14 +6,16 @@ class Api {
 
   getUserInfo() {
     return fetch(this._url + '/users/me', {
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     })
       .then(this._handleApiResponse)
   }
 
   getInitialCards() {
     return fetch(this._url + '/cards', {
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     })
       .then(this._handleApiResponse)
   }
@@ -22,6 +24,7 @@ class Api {
     return fetch(this._url + '/users/me', {
       method: 'PATCH',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify(userInfo)
     })
       .then(this._handleApiResponse)
@@ -31,6 +34,7 @@ class Api {
     return fetch(this._url + '/cards', {
       method: 'POST',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify(cardContent)
     })
       .then(this._handleApiResponse)
@@ -39,7 +43,8 @@ class Api {
   deleteCard(cardId) {
     return fetch(this._url + '/cards/' + cardId, {
       method: 'DELETE',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     })
       .then(this._handleApiResponse)
   }
@@ -47,7 +52,8 @@ class Api {
   addCardLike(cardId) {
     return fetch(this._url + '/cards/' + cardId + '/likes', {
       method: 'PUT',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     })
       .then(this._handleApiResponse)
   }
@@ -55,7 +61,8 @@ class Api {
   removeCardLike(cardId) {
     return fetch(this._url + '/cards/' + cardId + '/likes', {
       method: 'DELETE',
-      headers: this._headers
+      headers: this._headers,
+      credentials: 'include'
     })
       .then(this._handleApiResponse)
   }
@@ -64,6 +71,7 @@ class Api {
     return fetch(this._url + '/users/me/avatar', {
       method: 'PATCH',
       headers: this._headers,
+      credentials: 'include',
       body: JSON.stringify(avatarLink)
     })
       .then(this._handleApiResponse)
@@ -90,9 +98,8 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-31',
+  baseUrl: 'https://api.arbuznik.nomoredomains.work',
   headers: {
-    authorization: '61bf9579-56f9-4dc5-93fe-675c5a604ab6',
     'Content-Type': 'application/json'
   }
 });

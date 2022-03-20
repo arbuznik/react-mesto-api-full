@@ -3,14 +3,14 @@ const mongoose = require('mongoose')
 const { celebrate, Joi, errors } = require('celebrate')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const cors = require('cors')
 
 const users = require('./routes/users')
 const cards = require('./routes/cards')
-const { login, createUser } = require('./controllers/users')
+const { login, createUser, logout } = require('./controllers/users')
 const { auth } = require('./middlewares/auth')
 const { handleErrors } = require('./middlewares/errors')
 const { requestLogger, errorLogger } = require('./middlewares/logger')
-const { cors } = require('./middlewares/cors')
 
 const { PORT = 3000 } = process.env
 const app = express()
@@ -22,7 +22,16 @@ app.use(cookieParser())
 
 app.use(requestLogger)
 
-app.use(cors)
+app.use(cors({
+  origin: [
+    "http://localhost:3001",
+    "https://arbuznik.nomoredomains.work",
+    "http://arbuznik.nomoredomains.work",
+  ],
+  methods: ["OPTIONS", "GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  allowedHeaders: ["Content-Type", "origin", "Authorization", "Cookie"],
+  credentials: true,
+}));
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -42,6 +51,8 @@ app.post('/signup', celebrate({
     password: Joi.string().required().min(8),
   }),
 }), createUser)
+
+app.get('/signout', logout)
 
 app.use(auth)
 

@@ -5,7 +5,10 @@ const { ValidationError } = require('../middlewares/errors/ValidationError')
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.send({ cards }))
+    .then((cards) => res.send(cards.map(card => {
+      const { _id, name, link, owner, likes, createdAt } = card
+      return { _id, name, link, owner, likes, createdAt }
+    })))
     .catch(next)
 }
 
@@ -15,7 +18,10 @@ module.exports.createCard = (req, res, next) => {
   Card.create({
     name, link, owner: req.user._id,
   })
-    .then((card) => res.send({ card }))
+    .then((card) => {
+      const { _id, name, link, owner, likes, createdAt } = card
+      res.send({ _id, name, link, owner, likes, createdAt })
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Validation Error'))
@@ -34,8 +40,9 @@ module.exports.deleteCard = (req, res, next) => {
 
       if (card.owner.toString() === req.user._id) {
         Card.findByIdAndDelete(req.params.cardId)
-          .then((cardItem) => {
-            res.send({ cardItem })
+          .then((card) => {
+            const { _id, name, link, owner, likes, createdAt } = card
+            res.send({ _id, name, link, owner, likes, createdAt })
           })
       } else {
         throw new AuthRequiredError('Forbidden: not an owner')
@@ -55,7 +62,8 @@ module.exports.likeCard = (req, res, next) => {
         throw new NotFoundError('Карточка не найдена')
       }
 
-      res.send({ card })
+      const { _id, name, link, owner, likes, createdAt } = card
+      res.send({ _id, name, link, owner, likes, createdAt })
     })
     .catch(next)
 }
@@ -71,7 +79,8 @@ module.exports.dislikeCard = (req, res, next) => {
         throw new NotFoundError('Карточка не найдена')
       }
 
-      res.send({ card })
+      const { _id, name, link, owner, likes, createdAt } = card
+      res.send({ _id, name, link, owner, likes, createdAt })
     })
     .catch(next)
 }

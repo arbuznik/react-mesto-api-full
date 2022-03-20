@@ -5,12 +5,12 @@ function Card(props) {
   const card = props.card;
   const {currentUser} = useContext(CurrentUserContext);
 
-  const isOwnCard = card.owner._id === currentUser._id;
+  const isOwnCard = card.owner === currentUser._id;
   const deleteButtonClassName = (
     `place__delete-button ${isOwnCard ? 'place__delete-button_visible' : 'place__delete-button_hidden'}`
   )
 
-  const isLikedByOwner = card.likes.some(like => like._id === currentUser._id);
+  const isLikedByOwner = card.likes.some(like => like === currentUser._id);
   const placeLikeButtonClassName = (
     `place__like-button ${isLikedByOwner && 'place__like-button_active'}`
   )

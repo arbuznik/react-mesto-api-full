@@ -7,7 +7,10 @@ const { ValidationError } = require('../middlewares/errors/ValidationError')
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send({ users }))
+    .then((users) => res.send(users.map(user => {
+      const { _id, name, about, avatar, email } = user
+      return { _id, name, about, avatar, email }
+    })))
     .catch(next)
 }
 
@@ -18,7 +21,8 @@ module.exports.getUser = (req, res, next) => {
         throw new NotFoundError('Пользователь не найден')
       }
 
-      res.send({ user })
+      const { _id, name, about, avatar, email } = user
+      res.send({ _id, name, about, avatar, email })
     })
     .catch(next)
 }
@@ -30,7 +34,8 @@ module.exports.getCurrentUser = (req, res, next) => {
         throw new NotFoundError('Пользователь не найден')
       }
 
-      res.send({ user })
+      const { _id, name, about, avatar, email } = user
+      res.send({ _id, name, about, avatar, email })
     })
     .catch(next)
 }
@@ -45,9 +50,7 @@ module.exports.createUser = (req, res, next) => {
       name, about, avatar, email, password: hash,
     }))
     .then(() => res.status(200).send({
-      data: {
         name, about, avatar, email,
-      },
     }))
     .catch((error) => {
       if (error.code === 11000) {
@@ -68,7 +71,10 @@ module.exports.updateProfile = (req, res, next) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    .then((user) => res.send({ user }))
+    .then((user) => {
+      const { _id, name, about, avatar, email } = user
+      res.send({ _id, name, about, avatar, email })
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Validation Error'))
@@ -86,7 +92,10 @@ module.exports.updateAvatar = (req, res, next) => {
     { avatar },
     { new: true, runValidators: true },
   )
-    .then((user) => res.send({ user }))
+    .then((user) => {
+      const { _id, name, about, avatar, email } = user
+      res.send({ _id, name, about, avatar, email })
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Validation Error'))
@@ -109,7 +118,11 @@ module.exports.login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 3600000,
         httpOnly: true,
-      }).end()
+      }).send({ message: 'Auth successfull'})
     })
     .catch(next)
+}
+
+module.exports.logout = (req, res) => {
+  return res.status(200).clearCookie('jwt').send({ message: 'Logout successfull'})
 }

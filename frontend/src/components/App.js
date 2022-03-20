@@ -35,13 +35,22 @@ function App() {
 
 
   useEffect(() => {
-    api.getUserInfo()
-      .then(user => setCurrentUser(user))
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userData, cardsData]) => {
+        setCurrentUser(userData);
+        setCards(cardsData);
+      })
       .catch(api.handleApiError);
 
-    api.getInitialCards()
-      .then(cards => setCards(cards))
-      .catch(api.handleApiError);
+    // api.getUserInfo()
+    //   .then(user => {
+    //     setCurrentUser(user)
+    //   })
+    //   .catch(api.handleApiError);
+    //
+    // api.getInitialCards()
+    //   .then(cards => setCards(cards))
+    //   .catch(api.handleApiError);
 
     function handleEscPress(evt) {
       if (evt.key === 'Escape') {
@@ -57,9 +66,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-
-    if (token && !loggedIn) {
+    if (!loggedIn) {
       handleUserLogin()
     }
   }, [])
@@ -67,8 +74,8 @@ function App() {
   function handleAuthorization(userData) {
     auth.login(userData)
       .then(res => {
-        if (res.token) {
-          localStorage.setItem('token', res.token)
+        if (res.message === 'Auth successfull') {
+          // localStorage.setItem('token', res.token)
           handleUserLogin()
         }
       })
@@ -76,17 +83,13 @@ function App() {
   }
 
   function handleUserLogin() {
-    const token = localStorage.getItem('token')
-
-    if (token) {
-      auth.getLoggedInUser(token)
-        .then(user => {
-          setLoggedIn(true);
-          setLoggedInUser(user.data);
-          navigate("/")
-        })
-        .catch(api.handleApiError);
-    }
+    auth.getLoggedInUser()
+      .then(user => {
+        setLoggedIn(true);
+        setLoggedInUser(user);
+        navigate("/")
+      })
+      .catch(api.handleApiError);
   }
 
   function handleRegistration(userData) {
@@ -105,12 +108,13 @@ function App() {
   }
 
   function handleLogoutClick() {
-    localStorage.removeItem('token');
-    navigate('/sign-in');
+    auth.logout()
+      .then(() => navigate('/sign-in'))
+      .catch(api.handleApiError)
   }
 
   function handleLikeClick(card) {
-    const isLikedByOwner = card.likes.some(like => like._id === currentUser._id);
+    const isLikedByOwner = card.likes.some(like => like === currentUser._id);
 
     api.changeLikeCardStatus(card._id, isLikedByOwner)
       .then(newCard => {
