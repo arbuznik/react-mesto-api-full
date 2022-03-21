@@ -12,7 +12,7 @@ const { login, createUser, logout } = require('./controllers/users')
 const { auth } = require('./middlewares/auth')
 const { handleErrors } = require('./middlewares/errors')
 const { requestLogger, errorLogger } = require('./middlewares/logger')
-const { NotFoundError } = require("./middlewares/errors/NotFoundError");
+const { NotFoundError } = require('./middlewares/errors/NotFoundError')
 
 const { PORT = 3000 } = process.env
 const app = express()
